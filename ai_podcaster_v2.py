@@ -31,13 +31,13 @@ from langchain_ollama import ChatOllama  # For LLM chat interface
 # --- Prompt Templates ---
 
 # Template for summarizing text using the LLM
-summary_template = """
+SUMMARY_TEMPLATE = """
 Summarize the following text by highlighting the key points from the text.
 Text: {text}
 """
 
 # Template for judging the script quality and formatting
-judge_template = """
+JUDGE_TEMPLATE = """
 You are an expert podcast script reviewer. Review the following script for:
 - Conversational flow and engagement
 - Proper markdown formatting (each turn starts with **Speaker:**)
@@ -52,7 +52,7 @@ Script:
 """
 
 # Template for generating a podcast script with two speakers
-script_template = """
+SCRIPT_TEMPLATE = """
 Acting as a podcast scriptwriter, generate a conversational script for a podcast episode based on the given topic. Format the output based on two people, each taking a turn, the first is called {speakerA} and the second is called {speakerB}. 
 They are both tech enthusiasts and will discuss the topic in a friendly, engaging manner. Use markdown for formatting, with each speaker's name contained within asterik blocks followed by their dialogue on a new line. Do not add any effects for instance **(EFFECT)**, just keep the script as simple text. In total there should be no more than 20 turns in the conversation.
 The podcast name is {name}.
@@ -109,7 +109,7 @@ VOICE_MAP = {
 model = ChatOllama(model="deepseek-r1:8b")
 
 # Initialize the LLM model for analyzing and judging the script
-#judge_model = ChatOllama(model="deepseek-r1:8b")
+#judge_model = ChatOllama(model="qwen3:8b")
 
 # --- AI as a Judge ---
 
@@ -123,7 +123,7 @@ model = ChatOllama(model="deepseek-r1:8b")
 #    Returns:
 #        str: The LLM's verdict and feedback.
 #    """
-#    prompt = ChatPromptTemplate.from_template(judge_template)
+#    prompt = ChatPromptTemplate.from_template(JUDGE_TEMPLATE)
 #    chain = prompt | judge_model
 #    result = chain.invoke({"script": script})
 #    return result.content.strip()
@@ -144,7 +144,7 @@ def generate_topic_script(topic: str) -> str:
     speakerA = "Lev"  # First speaker
     speakerB = "Mila"   # Second speaker
 
-    prompt = ChatPromptTemplate.from_template(script_template)
+    prompt = ChatPromptTemplate.from_template(SCRIPT_TEMPLATE)
     chain = prompt | model
 
     # Generate the script using the LLM
