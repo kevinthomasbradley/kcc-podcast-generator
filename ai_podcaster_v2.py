@@ -11,11 +11,14 @@ Description:
     - Markdown parsing and cleaning
     - Audio synthesis and concatenation
     - Interactive Streamlit UI for topic input and audio playback
+Todo:
+    - [X] Cleanup audio files
+    - [ ] Refactor code for better modularity
+    - [ ] Implement AI-based script judging
+    - [ ] Add more speaker voices and customization options
+    - [ ] Improve error handling and user feedback
 """
-import os  # For file and directory operations
 import re  # For regular expressions (used in text cleaning and parsing)
-from textwrap import dedent
-from xml.sax.saxutils import escape
 from pathlib import Path
 
 import numpy as np  # For numerical operations, especially array concatenation
@@ -325,6 +328,11 @@ if generate_podcast_button:
     pipeline = KPipeline(lang_code="a")   
     out_dir = Path("audios")
     out_dir.mkdir(exist_ok=True)
+
+    # Clean out_dir before generating new audio
+    for f in out_dir.glob("*"):
+        if f.is_file():
+            f.unlink()
 
     # Generate audio for each turn and combine
     generate_audio_parts(pipeline, turns, out_dir)
